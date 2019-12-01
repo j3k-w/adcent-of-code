@@ -22,9 +22,11 @@ def calculate_recursively():
     sum = 0
     with open('input.txt') as inp:
         for mass in inp:
-            sum += fuel_r(int(mass))
+           s fuelum += fuel_r(int(mass))
     return sum
 
-
+# for the first part
 print(calculate())
+
+# for the second part
 print(calculate_recursively())
