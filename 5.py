@@ -1,8 +1,64 @@
-def computing(src: list, noun, verb) -> int:
+def compute(src: list) -> int:
     inp = src[:]
-    inp[1] = noun
-    inp[2] = verb
+    pos = 0
 
+    while pos < len(inp):
+        try:
+            command = inp[pos:pos+4]
+        except:
+            command = inp[pos:]
+        finally:
+            instr = str(inp[pos])[::-1]
+            opcode = int(instr[:2].replace('0', ''))
+            print("opcode:", opcode)
+            if opcode == 99:
+                return inp
+            elif opcode in (1, 2):
+                # FIRST PARAMETER; FAC1
+                if instr[2]:
+                    fac1 = command[1]
+                    print(f"fac1 mode: {instr[1]}, fac1 value: {fac1}")
+                else:
+                    fac1 = inp[command[1]]
+                    print(f"fac1 mode: {instr[1]}, fac1 value: {fac1}")
+
+                # SECOND PARAMETER; FAC2
+                if instr[3]:
+                    fac2 = command[2]
+                    print(f"fac2 mode: {instr[2]}, fac2 value: {fac2}")
+                else:
+                    fac2 = inp[command[2]]
+                    print(f"fac2 mode: {instr[2]}, fac2 value: {fac2}")
+
+                # THIRD PARAMETER; TARGET
+                if instr[4]:
+                    target = inp[command[3]]
+                    print(f"target mode: {instr[3]}, target value: {target}")
+                else:
+                    target = command[3]
+                    print(f"target mode: {instr[3]}, target value: {target}")
+
+                if opcode == 1:
+                    inp[target] = fac1 + fac2
+                    print(f"element {target} is now {inp[target]}")
+                elif opcode == 2:
+                    inp[target] = fac1 * fac2
+                    print(f"element {target} is now {inp[target]}")
+            pos += 4
+
+    return inp
+
+
+if __name__=="__main__":
+    # with open('5input.txt') as f:
+    #     src = [int(x) for x in next(f).split(',')]
+    src = [1002, 4, 3, 4, 33]
+    print("before:", src)
+    print("after:", compute(src))
+
+
+
+def c2():
     for index in range(0, len(inp), 4):
         opcode = inp[index]
         fac1 = inp[inp[index + 1]]
@@ -20,41 +76,3 @@ def computing(src: list, noun, verb) -> int:
 
 
     return inp[0]
-
-if __name__=="__main__":
-    with open('2input.txt') as f:
-        src = [int(x) for x in next(f).split(',')]
-
-        # Part 1.
-        print("First part:", computing(src, 12, 2))
-
-        # # Part 2.
-        for noun in range(100):
-            for verb in range(100):
-                if computing(src, noun, verb) == 19690720:
-                    print("Second part:", 100 * noun + verb)
-                    break
-=======
-def intcode_parser(s: list) -> list:
-    # s = source
-    opcode = s[0]
-    p1, p2 = s[1], s[2]
-    target = s[3]
-
-    if opcode not in (1, 2, 99):
-        raise SyntaxError("Wrong opcode!")
-    else:
-        if opcode == 1:
-            s[target] = p1 + p2
-        elif opcode == 2:
-            s[target] = p1 * p2
-        elif opcode == 99:
-            return s
-        else:
-            print("You did sth wrong")
-
-
-source = [1, 4, 5, 3]
-
-print(intcode_parser(source))
->>>>>>> e0eb5f3229caf2ce54fef933894f7a1dda213854
